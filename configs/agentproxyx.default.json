@@ -1,0 +1,71 @@
+{
+  "mode": "monitor",
+  "redaction": {
+    "action": "mask",
+    "mask": "[REDACTED]"
+  },
+  "firewall": {
+    "default_tool_action": "allow",
+    "commands": {
+      "allow": [
+        "npm test*",
+        "npm run test*",
+        "pytest*",
+        "python -m unittest*",
+        "go test ./...",
+        "cargo test*",
+        "ruff check*",
+        "mypy*"
+      ],
+      "deny": [
+        "rm -rf*",
+        "del /s*",
+        "format *",
+        "curl *|*sh*",
+        "wget *|*sh*",
+        "powershell*Invoke-WebRequest*",
+        "cat .env*",
+        "type .env*",
+        "cat *id_rsa*",
+        "type *id_rsa*",
+        "ssh-keygen*",
+        "scp *",
+        "ssh *"
+      ]
+    },
+    "files": {
+      "allow": [
+        "./src/**",
+        "./tests/**",
+        "./docs/**",
+        "./README.md",
+        "./pyproject.toml"
+      ],
+      "deny": [
+        ".env",
+        ".env.*",
+        "**/.env",
+        "**/.env.*",
+        "**/id_rsa",
+        "**/id_ed25519",
+        "**/.ssh/**",
+        "**/*.pem",
+        "**/*.key",
+        "**/wallet.dat"
+      ]
+    }
+  },
+  "costs": {
+    "provider": "anthropic",
+    "input_per_million": 3.0,
+    "output_per_million": 15.0,
+    "cache_write_multiplier": 1.25,
+    "cache_read_multiplier": 0.1
+  },
+  "cache": {
+    "enabled": true,
+    "min_static_chars": 4000,
+    "anthropic_ttl": "1h"
+  }
+}
+

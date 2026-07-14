@@ -1,0 +1,156 @@
+:root {
+  color-scheme: dark;
+  --bg: #101214;
+  --panel: #181c20;
+  --panel-2: #20262b;
+  --text: #edf2f4;
+  --muted: #aab5bd;
+  --line: #303941;
+  --green: #52d273;
+  --yellow: #f2c14e;
+  --red: #ff6b6b;
+  --blue: #59a5ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+  border-bottom: 1px solid var(--line);
+  background: #14181b;
+}
+
+h1 {
+  margin: 0;
+  font-size: 26px;
+  letter-spacing: 0;
+}
+
+p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--green);
+  font-weight: 700;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--green);
+  box-shadow: 0 0 18px var(--green);
+}
+
+main {
+  width: min(1120px, calc(100vw - 32px));
+  margin: 24px auto 48px;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.metrics div {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.metrics strong {
+  display: block;
+  font-size: 24px;
+}
+
+.metrics span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.timeline {
+  display: grid;
+  gap: 10px;
+}
+
+.event {
+  display: grid;
+  grid-template-columns: 130px 150px 1fr;
+  gap: 14px;
+  align-items: start;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--blue);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.event.secret_redacted,
+.event.tool_blocked,
+.event.proxy_error,
+.event.provider_error {
+  border-left-color: var(--red);
+}
+
+.event.cache_optimized {
+  border-left-color: var(--green);
+}
+
+.time,
+.agent {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.summary {
+  font-weight: 700;
+}
+
+pre {
+  white-space: pre-wrap;
+  color: var(--muted);
+  background: var(--panel-2);
+  border-radius: 8px;
+  padding: 10px;
+  overflow: auto;
+}
+
+@media (max-width: 760px) {
+  .topbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+    padding: 20px;
+  }
+
+  .metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .event {
+    grid-template-columns: 1fr;
+  }
+}
+

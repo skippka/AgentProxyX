@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AgentProxyX Replay</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>AgentProxyX</h1>
+      <p>Local agent security, cost control, and replay timeline</p>
+    </div>
+    <div class="status">
+      <span class="dot"></span>
+      live
+    </div>
+  </header>
+
+  <main>
+    <section class="metrics" id="metrics">
+      <div><strong id="eventsCount">0</strong><span>events</span></div>
+      <div><strong id="blockedCount">0</strong><span>blocked</span></div>
+      <div><strong id="secretCount">0</strong><span>secret hits</span></div>
+      <div><strong id="savedCost">$0.0000</strong><span>cache saved</span></div>
+    </section>
+
+    <section class="timeline" id="timeline"></section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
+
