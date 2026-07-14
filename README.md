@@ -1,5 +1,9 @@
 # AgentProxyX
 
+[![CI](https://github.com/skippka/AgentProxyX/actions/workflows/ci.yml/badge.svg)](https://github.com/skippka/AgentProxyX/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](pyproject.toml)
+
 **AgentProxyX is a local security and cost-control gateway for AI coding agents.**
 
 It sits between local AI development agents and model providers, then gives you four things most agent stacks still miss:
@@ -39,6 +43,7 @@ AgentProxyX ships with presets for popular coding agents and agent-capable edito
 ## Quick Start
 
 ```powershell
+cd C:\Users\vadim\Desktop\AgentProxyX
 python -m agentproxyx doctor
 python -m agentproxyx agents
 python -m agentproxyx start --agent claude-code --dry-run
@@ -124,6 +129,14 @@ AgentProxyX combines the useful middle:
 - prompt-cache optimization hints;
 - cost accounting and local replay timeline;
 - adapter presets for many agents instead of one vendor.
+
+## GitHub Topics
+
+Suggested repository topics:
+
+```text
+ai-agents llm-proxy mcp security developer-tools prompt-caching secret-scanning codex claude-code aider cursor openrouter
+```
 
 ## Project Roadmap
 
