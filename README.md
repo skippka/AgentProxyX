@@ -1,6 +1,5 @@
 # AgentProxyX
 
-[![CI](https://github.com/skippka/AgentProxyX/actions/workflows/ci.yml/badge.svg)](https://github.com/skippka/AgentProxyX/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](pyproject.toml)
 
