@@ -38,6 +38,7 @@ AgentProxyX ships with presets for popular coding agents and agent-capable edito
 | JetBrains AI Assistant | `jetbrains-ai` | Experimental |
 | Tabby | `tabby` | Experimental |
 | LiteLLM clients | `litellm` | Ready |
+| Cody | `cody` | Experimental |
 
 ## Quick Start
 

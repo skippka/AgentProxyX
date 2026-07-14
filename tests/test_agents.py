@@ -6,7 +6,7 @@ from agentproxyx.agents import get_preset, presets
 class AgentPresetTests(unittest.TestCase):
     def test_many_agents_are_available(self):
         all_presets = presets()
-        for key in ["claude-code", "codex-cli", "gemini-cli", "aider", "cursor", "openhands"]:
+        for key in ["claude-code", "codex-cli", "gemini-cli", "aider", "cursor", "openhands", "cody"]:
             self.assertIn(key, all_presets)
 
     def test_env_uses_requested_port(self):
