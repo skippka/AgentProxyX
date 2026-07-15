@@ -19,6 +19,8 @@ DEFAULT_CONFIG: dict[str, Any] = {
                 "python -m unittest*",
                 "go test ./...",
                 "cargo test*",
+                "ruff check*",
+                "mypy*",
             ],
             "deny": [
                 "rm -rf*",
@@ -31,6 +33,7 @@ DEFAULT_CONFIG: dict[str, Any] = {
                 "type .env*",
                 "cat *id_rsa*",
                 "type *id_rsa*",
+                "ssh-keygen*",
                 "scp *",
                 "ssh *",
             ],
@@ -47,6 +50,16 @@ DEFAULT_CONFIG: dict[str, Any] = {
                 "**/.ssh/**",
                 "**/*.pem",
                 "**/*.key",
+                "**/wallet.dat",
+            ],
+        },
+        "urls": {
+            "allow": [],
+            "deny": [
+                "http://169.254.169.254*",
+                "https://169.254.169.254*",
+                "http://metadata.google.internal*",
+                "https://metadata.google.internal*",
             ],
         },
     },
