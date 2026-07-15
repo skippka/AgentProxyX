@@ -175,6 +175,15 @@ def presets(port: int = 8080) -> dict[str, AgentPreset]:
             "Use AgentProxyX as the upstream-compatible base URL.",
             "Good bridge for multi-provider teams.",
         ),
+        "cody": AgentPreset(
+            "cody",
+            "Cody",
+            "Editor Extension",
+            {**_proxy_env(port), "OPENAI_BASE_URL": openai_base},
+            "Configure Cody's custom provider/proxy settings.",
+            "Experimental — depends on Sourcegraph's provider config support.",
+            experimental=True,
+        ),
     }
 
 
