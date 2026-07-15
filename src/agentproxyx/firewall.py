@@ -76,11 +76,37 @@ class AgentFirewall:
 
         return FirewallDecision(True, "File access allowed", [])
 
+    def check_urls(self, urls: list[str] | None) -> FirewallDecision:
+        if not urls:
+            return FirewallDecision(True, "No URLs supplied", [])
+        rules = self.config.get("urls", {})
+        deny_patterns = rules.get("deny", [])
+        allow_patterns = rules.get("allow", [])
+        matches: list[str] = []
+
+        for url in urls:
+            for pattern in deny_patterns:
+                if fnmatch.fnmatchcase(url.lower(), pattern.lower()):
+                    matches.append(f"{url} -> {pattern}")
+
+        if matches:
+            return FirewallDecision(False, f"URL access denied: {matches[0]}", matches)
+
+        if allow_patterns:
+            outside_allow = [url for url in urls if not any(fnmatch.fnmatchcase(url.lower(), pattern.lower()) for pattern in allow_patterns)]
+            if outside_allow:
+                return FirewallDecision(False, f"URL outside allow-list: {outside_allow[0]}", outside_allow)
+
+        return FirewallDecision(True, "URL access allowed", [])
+
     def check_tool_call(self, payload: dict[str, Any]) -> FirewallDecision:
         command = payload.get("command") or payload.get("cmd")
         files = payload.get("files") or payload.get("paths")
+        urls = payload.get("urls") or payload.get("url")
         if isinstance(files, str):
             files = [files]
+        if isinstance(urls, str):
+            urls = [urls]
 
         command_decision = self.check_command(command)
         if not command_decision.allowed:
@@ -90,5 +116,9 @@ class AgentFirewall:
         if not file_decision.allowed:
             return file_decision
 
-        return FirewallDecision(True, "Tool call allowed", command_decision.matches + file_decision.matches)
+        url_decision = self.check_urls(urls)
+        if not url_decision.allowed:
+            return url_decision
+
+        return FirewallDecision(True, "Tool call allowed", command_decision.matches + file_decision.matches + url_decision.matches)
 

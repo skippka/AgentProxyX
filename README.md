@@ -117,6 +117,17 @@ Response:
 
 Default rules live in [`configs/agentproxyx.default.json`](configs/agentproxyx.default.json).
 
+For stdio MCP servers, wrap the server command so `tools/call` requests are checked
+before they reach the underlying tool server:
+
+```powershell
+agentproxyx mcp wrap -- python -m your_mcp_server
+```
+
+The wrapper normalizes common shell, file, and network tool payloads into firewall
+checks, logs allowed and blocked calls into the replay database, and returns a
+JSON-RPC error for blocked calls.
+
 ## Why This Is Different
 
 Most LLM proxies only log requests or route providers. Most secret scanners only scan static files. Most MCP security ideas are research prototypes.

@@ -10,6 +10,7 @@ from .agents import get_preset, presets
 from .config import load_config, write_default_config
 from .dashboard import DashboardServer
 from .firewall import AgentFirewall
+from .mcp import wrap_mcp_server
 from .proxy import AgentProxyServer
 from .replay import ReplayStore
 from .secrets import find_secrets
@@ -70,6 +71,13 @@ def cmd_firewall(args: argparse.Namespace) -> int:
     decision = firewall.check_tool_call(payload)
     print(json.dumps({"allowed": decision.allowed, "reason": decision.reason, "matches": decision.matches}, indent=2))
     return 0 if decision.allowed else 3
+
+
+def cmd_mcp_wrap(args: argparse.Namespace) -> int:
+    cfg = load_config(args.config)
+    firewall = AgentFirewall(cfg)
+    store = ReplayStore(args.replay_db)
+    return wrap_mcp_server(args.command, firewall, store, agent=args.agent)
 
 
 def cmd_start(args: argparse.Namespace) -> int:
@@ -140,6 +148,15 @@ def build_parser() -> argparse.ArgumentParser:
     firewall_parser.add_argument("--command")
     firewall_parser.add_argument("--file", action="append")
     firewall_parser.set_defaults(func=cmd_firewall)
+
+    mcp_parser = sub.add_parser("mcp", help="MCP server wrapper commands.")
+    mcp_sub = mcp_parser.add_subparsers(dest="mcp_command", required=True)
+    mcp_wrap_parser = mcp_sub.add_parser("wrap", help="Wrap a stdio MCP server and firewall tools/call requests.")
+    mcp_wrap_parser.add_argument("--agent", default="mcp")
+    mcp_wrap_parser.add_argument("--config")
+    mcp_wrap_parser.add_argument("--replay-db", default=".agentproxyx/replay.sqlite")
+    mcp_wrap_parser.add_argument("command", nargs=argparse.REMAINDER, help="MCP server command after --")
+    mcp_wrap_parser.set_defaults(func=cmd_mcp_wrap)
 
     start_parser = sub.add_parser("start", help="Start the local proxy and replay dashboard.")
     start_parser.add_argument("--agent", default="claude-code")
