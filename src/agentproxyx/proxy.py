@@ -7,7 +7,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
 from urllib.parse import urljoin
 
-from .cache import maybe_optimize_anthropic_payload
+from .cache import optimize_payload
 from .cost import estimate_cost
 from .firewall import AgentFirewall
 from .replay import ReplayStore
@@ -118,12 +118,18 @@ class AgentProxyServer:
                     )
                     body = redacted_text.encode("utf-8")
 
-                body, cache_changed, cacheable_chars = maybe_optimize_anthropic_payload(body, server.config)
-                if cache_changed:
-                    server.store.add("cache_optimized", server.agent, "Added prompt-cache hints", {"cacheable_chars": cacheable_chars})
+                cache_result = optimize_payload(body, server.config)
+                body = cache_result.body
+                if cache_result.changed:
+                    server.store.add(
+                        "cache_optimized",
+                        server.agent,
+                        "Added prompt-cache hints",
+                        {"cacheable_chars": cache_result.cacheable_chars, "provider": cache_result.provider},
+                    )
 
                 if server.dry_run or not server.target:
-                    estimate = estimate_cost(body.decode("utf-8", errors="replace"), config=server.config, cacheable_chars=cacheable_chars)
+                    estimate = estimate_cost(body.decode("utf-8", errors="replace"), config=server.config, cacheable_chars=cache_result.cacheable_chars)
                     server.store.add(
                         "request",
                         server.agent,
@@ -136,7 +142,7 @@ class AgentProxyServer:
                             "agentproxyx": "dry-run",
                             "path": self.path,
                             "redacted_secrets": len(findings),
-                            "cache_optimized": cache_changed,
+                            "cache_optimized": cache_result.changed,
                             "cost": estimate.__dict__,
                         },
                     )
@@ -157,7 +163,7 @@ class AgentProxyServer:
                             body.decode("utf-8", errors="replace"),
                             response_body.decode("utf-8", errors="replace"),
                             server.config,
-                            cacheable_chars,
+                            cache_result.cacheable_chars,
                         )
                         server.store.add(
                             "request",
